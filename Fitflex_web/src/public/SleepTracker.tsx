@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useUpdateSleep } from "./query"; // Import the sleep mutation hook
+import { useUpdateSleep } from "./query"; 
 
 interface SleepTrackerProps {
   hoursSlept: number;
   setHoursSlept: React.Dispatch<React.SetStateAction<number>>;
-  userId?: string; // Made optional in case we use localStorage instead
+  userId?: string; 
 }
 
 const SleepTracker: React.FC<SleepTrackerProps> = ({ hoursSlept, setHoursSlept, userId }) => {
-  const { mutate: updateSleep, isPending, isError } = useUpdateSleep(); // Using the sleep mutation hook
+  const { mutate: updateSleep, isPending, isError } = useUpdateSleep(); 
 
-  // Retrieve userId from localStorage if not provided as a prop
   const [storedUserId, setStoredUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -20,15 +19,13 @@ const SleepTracker: React.FC<SleepTrackerProps> = ({ hoursSlept, setHoursSlept, 
     }
   }, [userId]);
 
-  const finalUserId = userId || storedUserId; // Use prop if available, otherwise fallback to localStorage
-
+  const finalUserId = userId || storedUserId; 
   const updateSleepHours = () => {
     if (!finalUserId) {
       console.error("User ID is missing!");
       return;
     }
 
-    // Call API to update sleep data
     updateSleep(
       { userId: finalUserId, sleepHours: hoursSlept },
       {
