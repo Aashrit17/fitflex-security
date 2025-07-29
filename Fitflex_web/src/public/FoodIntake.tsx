@@ -20,32 +20,24 @@ interface FoodIntakeProps {
 const FoodIntake: React.FC<FoodIntakeProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState<"intake" | "manage">("intake");
 
-  // Fetch foods (Re-fetches after add, edit, delete)
   const { data: foods, refetch, isLoading, error } = useGetFoods();
 
-  // Log data to verify structure
-  console.log(foods); // Check the data structure
+  console.log(foods); 
 
-  // Safely check if foods is an array
   const safeFoods = Array.isArray(foods) ? foods : [];
 
-  // Food Intake State
   const [selectedFood, setSelectedFood] = useState<string>("");
 
-  // Mutations for logging food intake
   const { mutate: logFoodIntake, isPending: logging } = useUpdateCaloriesConsumed();
 
-  // Manage Food State
   const [foodName, setFoodName] = useState("");
   const [foodCalories, setFoodCalories] = useState("");
   const [editingFood, setEditingFood] = useState<FoodItem | null>(null);
 
-  // Mutations for managing food
   const { mutate: addFood } = useAddFood();
   const { mutate: updateFood } = useUpdateFood();
   const { mutate: deleteFood } = useDeleteFood();
 
-  /** ✅ Log food intake */
   const handleLogFoodIntake = () => {
     if (!userId || !selectedFood) return;
   
@@ -64,7 +56,7 @@ const FoodIntake: React.FC<FoodIntakeProps> = ({ userId }) => {
     );
   };
 
-  /** ✅ Add or update a food item */
+
   const handleSaveFood = () => {
     if (!foodName || !foodCalories) return;
 
@@ -84,19 +76,17 @@ const FoodIntake: React.FC<FoodIntakeProps> = ({ userId }) => {
     setEditingFood(null);
   };
 
-  /** ✅ Edit an existing food */
+
   const handleEditFood = (foodItem: FoodItem) => {
     setFoodName(foodItem.name);
     setFoodCalories(foodItem.calorie.toString());
     setEditingFood(foodItem);
   };
 
-  /** ✅ Delete a food item */
   const handleDeleteFood = (id: string) => {
     deleteFood(id, { onSuccess: () => refetch() });
   };
 
-  // Loading and error handling UI
   if (isLoading) {
     return <div className="text-center text-white">Loading...</div>;
   }
