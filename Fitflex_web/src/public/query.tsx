@@ -2,7 +2,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 const API_BASE_URL = "https://localhost:3001/api/v1";
 
-// ✅ Register (multipart/form-data for image upload)
 export const useRegister = () => {
   return useMutation({
     mutationKey: ["REGISTER_USER"],
@@ -15,7 +14,6 @@ export const useRegister = () => {
   });
 };
 
-// ✅ Login
 export const useLogin = () => {
   return useMutation({
     mutationKey: ["LOGIN_USER"],
@@ -24,7 +22,6 @@ export const useLogin = () => {
   });
 };
 
-// ✅ OTP Verification
 export const useVerifyOTP = () => {
   return useMutation({
     mutationKey: ["VERIFY_OTP"],
@@ -33,7 +30,6 @@ export const useVerifyOTP = () => {
   });
 };
 
-// ✅ Resend OTP
 export const useResendOTP = () => {
   return useMutation({
     mutationKey: ["RESEND_OTP"],
@@ -72,8 +68,6 @@ export const useUpdateUser = () => {
   });
 };
 
-
-// ✅ Get All Foods
 export const useGetFoods = () => {
   return useQuery({
     queryKey: ["GET_FOODS"],
@@ -84,7 +78,6 @@ export const useGetFoods = () => {
   });
 };
 
-// ✅ Add Food
 export const useAddFood = () => {
   return useMutation({
     mutationKey: ["ADD_FOOD"],
@@ -93,7 +86,6 @@ export const useAddFood = () => {
   });
 };
 
-// ✅ Update Food
 export const useUpdateFood = () => {
   return useMutation({
     mutationKey: ["UPDATE_FOOD"],
@@ -105,7 +97,6 @@ export const useUpdateFood = () => {
   });
 };
 
-// ✅ Delete Food
 export const useDeleteFood = () => {
   return useMutation({
     mutationKey: ["DELETE_FOOD"],
@@ -113,7 +104,6 @@ export const useDeleteFood = () => {
   });
 };
 
-// ✅ Update General Progress
 export const useUpdateProgress = () => {
   return useMutation({
     mutationKey: ["UPDATE_PROGRESS"],
@@ -132,7 +122,6 @@ export const useUpdateProgress = () => {
   });
 };
 
-// ✅ Water Intake
 export const useUpdateWaterIntake = () => {
   return useMutation({
     mutationKey: ["UPDATE_WATER_INTAKE"],
@@ -143,7 +132,6 @@ export const useUpdateWaterIntake = () => {
   });
 };
 
-// ✅ Exercise
 export const useUpdateExercise = () => {
   return useMutation({
     mutationKey: ["LOG_OR_UPDATE_EXERCISE"],
@@ -161,7 +149,6 @@ export const useUpdateExercise = () => {
   });
 };
 
-// ✅ Calories Consumed
 export const useUpdateCaloriesConsumed = () => {
   return useMutation({
     mutationKey: ["UPDATE_CALORIES_CONSUMED"],
@@ -177,7 +164,6 @@ export const useUpdateCaloriesConsumed = () => {
   });
 };
 
-// ✅ Calories Burned
 export const useUpdateCaloriesBurned = () => {
   return useMutation({
     mutationKey: ["UPDATE_CALORIES_BURNED"],
@@ -188,7 +174,6 @@ export const useUpdateCaloriesBurned = () => {
   });
 };
 
-// ✅ Sleep
 export const useUpdateSleep = () => {
   return useMutation({
     mutationKey: ["UPDATE_SLEEP"],
@@ -199,7 +184,6 @@ export const useUpdateSleep = () => {
   });
 };
 
-// ✅ Delete Progress Entry
 export const useDeleteProgressEntry = () => {
   return useMutation({
     mutationKey: ["DELETE_PROGRESS_ENTRY"],
@@ -208,7 +192,6 @@ export const useDeleteProgressEntry = () => {
   });
 };
 
-// ✅ Get User Progress
 export const useGetUserProgress = (userId: string) => {
   return useQuery({
     queryKey: ["GET_USER_PROGRESS", userId],
@@ -220,7 +203,6 @@ export const useGetUserProgress = (userId: string) => {
   });
 };
 
-// ✅ Exercises
 export const useGetItemExercises = (userId: string) => {
   return useQuery({
     queryKey: ["GET_EXERCISES", userId],
