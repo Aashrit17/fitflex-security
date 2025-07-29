@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useGetUserProgress } from './query'; // Import the query to fetch progress data
+import { useGetUserProgress } from './query'; 
 
 interface ProgressTrackerProps {
   userId: string;
@@ -14,8 +14,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ userId }) => {
 
   useEffect(() => {
     if (data) {
-      // Make sure to access the response's `data` property
-      const { totalCalories, caloriesBurned, goal } = data.data; // `data.data` contains the actual response data
+      const { totalCalories, caloriesBurned, goal } = data.data; 
       setTotalCalories(totalCalories);
       setCaloriesBurned(caloriesBurned);
       setGoal(goal);
