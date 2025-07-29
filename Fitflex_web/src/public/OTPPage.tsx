@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useVerifyOTP } from "../public/query"; // ✅ Corrected import
+import { useVerifyOTP } from "../public/query";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 
