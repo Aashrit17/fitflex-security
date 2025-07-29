@@ -11,7 +11,6 @@ const ProPage: React.FC<ProPageProps> = ({ userId }) => {
   const [isPro, setIsPro] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch user data to check if already Pro
   useEffect(() => {
     const fetchUserStatus = async () => {
       try {
@@ -28,7 +27,6 @@ const ProPage: React.FC<ProPageProps> = ({ userId }) => {
     if (userId) fetchUserStatus();
   }, [userId]);
 
-  // ✅ Handle Khalti subscription
   const handleSubscribe = async () => {
     try {
       const response = await axios.post("https://localhost:3001/api/khalti/initiate", {
