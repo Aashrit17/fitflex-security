@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 // Replace with your sandbox secret key
 const KHALTI_SECRET_KEY = "Key test_secret_key_72043a20d5d2429fa9d4718352796e2b";
-
+//payment 
 exports.initiatePayment = async (req, res) => {
   try {
     const { userId, amount, name, email, phone } = req.body;
