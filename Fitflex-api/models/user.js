@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
   loginAttempts: { type: Number, default: 0 },
   lockUntil: { type: Date },
   isVerified: { type: Boolean, default: false },
+  pro: { type: Boolean, default: false },
   otp: String,
   otpExpire: Date,
   passwordChangedAt: Date,
@@ -50,4 +51,4 @@ userSchema.methods.getResetPasswordToken = function () {
 };
 
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.models.User || mongoose.model("User", userSchema);

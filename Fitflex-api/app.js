@@ -10,14 +10,21 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const fs = require("fs");
+const https = require("https");
+
 const app = express();
 
+// CORS setup
 app.use(cors());
-app.use(cors({
-  origin: "http://localhost:5173", // or "*" for all (dev only)
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "https://localhost:5173",
+    credentials: true,
+  })
+);
 app.options("*", cors());
+
 
 // Load env file
 dotenv.config({
@@ -29,7 +36,9 @@ connectDB();
 
 // Route files
 const auth = require("./routes/user");
-
+const progress = require("./routes/progressRoutues");
+const subscription = require("./routes/subscriptionRoutes");
+const khaltiRoutes = require("./routes/khaltiRoutes");
 
 // Body parser
 app.use(express.json());
@@ -59,35 +68,36 @@ app.use(
 // Prevent XSS attacks
 app.use(xss());
 
-// Set static folder
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
+// Static file uploads
 app.use("/uploads", (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Origin", "https://localhost:5173");
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
-
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
-
 
 // Mount routers
 app.use("/api/v1/auth", auth);
-
+app.use("/api/v1/progress", progress);
+app.use("/api/v1/subscription", subscription);
+app.use("/api/khalti", khaltiRoutes);
 
 const PORT = process.env.PORT || 3001;
 
-const server = app.listen(
-  PORT,
+const httpsOptions = {
+  key: fs.readFileSync(path.join(__dirname, "../certs/server.key")),
+  cert: fs.readFileSync(path.join(__dirname, "../certs/server.crt")),
+};
+
+const server = https.createServer(httpsOptions, app).listen(PORT, () => {
   console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-  )
-);
+    `✅ HTTPS Server running in ${process.env.NODE_ENV} mode on https://localhost:${PORT}`.yellow.bold
+  );
+});
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
   console.log(`Error: ${err.message}`.red);
-  // Close server & exit process
   server.close(() => process.exit(1));
 });

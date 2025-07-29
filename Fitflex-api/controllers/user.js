@@ -1,5 +1,5 @@
 const asyncHandler = require("../middleware/async");
-const User = require("../models/user");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
@@ -11,6 +11,16 @@ const register = asyncHandler(async (req, res) => {
 
   if (!name || !email || !phone || !password) {
     return res.status(400).json({ message: "All fields are required" });
+  }
+
+  // ✅ Password strength check (INSIDE the handler)
+  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+  if (!strongPasswordRegex.test(password)) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
+    });
   }
 
   const existingUser = await User.findOne({ email });
@@ -152,7 +162,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   message: "Profile updated successfully",
   user: {
     ...user.toObject(),
-    imageUrl: user.image ? `http://localhost:3001/uploads/${user.image}` : null,
+    imageUrl: user.image ? `https://localhost:3001/uploads/${user.image}` : null,
   },
 });
 
@@ -214,7 +224,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
   const resetToken = user.getResetPasswordToken(); // This method should set and return the token
   await user.save({ validateBeforeSave: false });
 
-  const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+  const resetUrl = `https://localhost:5173/reset-password/${resetToken}`;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -282,6 +292,8 @@ const resetPassword = asyncHandler(async (req, res) => {
 
   res.status(200).json({ success: true, message: "Password updated successfully" });
 });
+
+
 
 module.exports = {
   register,

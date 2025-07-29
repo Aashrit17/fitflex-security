@@ -1,42 +1,5 @@
-// const express = require("express");
-// const router = express.Router();
-// const { protect } = require("../middleware/auth");
-
-// const upload = require("../middleware/uploads");
-
-// const {
-//   register,
-//   login,
-//   uploadImage,
-// } = require("../controllers/user");
-
-// router.post("/uploadImage", upload, uploadImage);
-// router.post("/register", register);
-// router.post("/login", login);
-
-
-// module.exports = router;
-
-// const express = require("express");
-// const router = express.Router();
-// const {
-//   register,
-//   login,
-//   verifyOTP,
-//   uploadImage,
-// } = require("../controllers/user");
-
-// const upload = require("../middleware/uploads");
-// const UserValidation = require("../validation/userValidation");
-
-// router.post("/register", UserValidation, register);
-// router.post("/login", login);
-// router.post("/verify-otp", verifyOTP);
-// router.post("/uploadImage", upload.single("profilePicture"), uploadImage);
-
-// module.exports = router;
-
 const express = require("express");
+const User = require("../models/User");
 const router = express.Router();
 const {
   register,
@@ -55,6 +18,18 @@ const UserValidation = require("../validation/userValidation");
 // ✅ Registration route with validation and file upload
 router.post("/register", upload.single("image"), UserValidation, register);
 
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("pro");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error("❌ Error fetching user by ID:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 // ✅ OTP and Login routes
 router.post("/login", login);
 router.post("/verify-otp", verifyOTP);
