@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // 🔁 Make sure this is imported
 import ResetPasswordPage from "./public/reset";
 import ProsPage from "./public/progress";
+import ProtectedRoute from "./public/ProtectedRoute";
 
 // Create a QueryClient instance
 const queryClient = new QueryClient();
@@ -25,26 +26,36 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardView />,
+    element: (
+      <ProtectedRoute>
+        <DashboardView />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/progress",
-    element: <ProgressPage userId={""} />,
+    element: (
+      <ProtectedRoute>
+        <ProgressPage userId={""} />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/pro",
-    element: <ProsPage userId={""} />,
+    element: (
+      <ProtectedRoute>
+        <ProsPage userId={""} />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/verify-otp",
     element: <OTPPage />,
   },
-
   {
-    path: "/reset-password/:token", // ✅ This is what you need
+    path: "/reset-password/:token",
     element: <ResetPasswordPage />,
   },
-
 ]);
 
 function App() {

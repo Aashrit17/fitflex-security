@@ -16,6 +16,7 @@ const UserDetails: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [htmlWarning, setHtmlWarning] = useState<string | null>(null);
 
   const { mutate: updateUser, isPending } = useUpdateUser();
 
@@ -37,11 +38,27 @@ const UserDetails: React.FC = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
     if (editableUser) {
-      setEditableUser({
-        ...editableUser,
-        [e.target.name]: e.target.value,
-      });
+      if (name === "name") {
+        const htmlTagPattern = /<[^>]*>?/gm;
+        if (htmlTagPattern.test(value)) {
+          setHtmlWarning("HTML tags are not allowed in the name.");
+        } else {
+          setHtmlWarning(null);
+        }
+        const sanitizedValue = value.replace(htmlTagPattern, "");
+        setEditableUser({
+          ...editableUser,
+          [name]: sanitizedValue,
+        });
+      } else {
+        setEditableUser({
+          ...editableUser,
+          [name]: value,
+        });
+      }
     }
   };
 
@@ -88,17 +105,16 @@ const UserDetails: React.FC = () => {
         <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
           <div className="flex justify-center mb-6">
             <img
-  src={
-    selectedImage
-      ? URL.createObjectURL(selectedImage)
-      : user?.image
-      ? `https://localhost:3001/uploads/${user.image}`
-      : "/default-avatar.png"
-  }
-  alt="User Avatar"
-  className="w-36 h-36 rounded-full border-4 border-gray-300 shadow-lg"
-/>
-
+              src={
+                selectedImage
+                  ? URL.createObjectURL(selectedImage)
+                  : user?.image
+                  ? `https://localhost:3001/uploads/${user.image}`
+                  : "/default-avatar.png"
+              }
+              alt="User Avatar"
+              className="w-36 h-36 rounded-full border-4 border-gray-300 shadow-lg"
+            />
           </div>
 
           <div className="space-y-4">
@@ -111,6 +127,9 @@ const UserDetails: React.FC = () => {
                 onChange={handleInputChange}
                 className="w-full p-3 mt-2 bg-gray-700 text-white rounded-md border border-gray-600"
               />
+              {htmlWarning && (
+                <p className="text-red-400 text-sm mt-1">{htmlWarning}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm text-gray-300">Email</label>
